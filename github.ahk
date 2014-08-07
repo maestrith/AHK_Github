@@ -1,12 +1,12 @@
 git:=new github("maestrith") ;creates the git object with the Owner name "maestrith"
 ;update this script
 FileRead,text,%A_ScriptName%
-git.update("AHK_Github",A_ScriptName,text,"Working on the class")
+git.update("AHK_Github",A_ScriptFullPath,text,"Working on the class")
 ;/update this script
 /*
 	;original creation of the repo
 	git.CreateRepo("AHK_Github")
-	git.CreateFile("AHK_Github",A_ScriptName,text,"First Commit","Chad Wilson","maestrith@gmail.com")
+	git.CreateFile("AHK_Github",A_ScriptFullPath,text,"First Commit","Chad Wilson","maestrith@gmail.com")
 */
 /*
 	git.CreateRepo("Testing") ;creates a new repo with the name "Testing". There are other options that can be set.
@@ -50,7 +50,8 @@ class github{
 		FileDelete,create.txt
 		FileAppend,% this.http.ResponseText,create.txt
 	}
-	CreateFile(repo,filename,text,commit="First Commit",realname="",email=""){
+	CreateFile(repo,filefullpath,text,commit="First Commit",realname="",email=""){
+		SplitPath,filefullpath,filename
 		url:=this.url "/repos/" this.owner "/" repo "/contents/" filename this.token,file:=this.encode(text)
 		json=
 		(
@@ -61,13 +62,13 @@ class github{
 		RegExMatch(this.http.ResponseText,"U)"Chr(34) "sha" Chr(34) ":(.*),",found)
 		sha:=Trim(found1,Chr(34))
 		if sha
-			IniWrite,%sha%,files.ini,%filename%,sha
+			IniWrite,%sha%,files.ini,%filefullpath%,sha
 	}
-	Update(repo,filename,text,commit="Updated",branch="master"){
-		IniRead,sha,files.ini,%filename%,sha,0
+	Update(repo,filefullpath,text,commit="Updated",branch="master"){
+		SplitPath,filefullpath,filename
+		IniRead,sha,files.ini,%filefullpath%,sha,0
 		if !sha
 			return m("File does not exist.  Please create the file first")
-		;PUT /repos/:owner/:repo/contents/:path
 		url:=this.url "/repos/" this.owner "/" repo "/contents/" filename this.token
 		text:=this.encode(text)
 		json=
