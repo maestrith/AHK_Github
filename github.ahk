@@ -1,9 +1,12 @@
 git:=new github("maestrith") ;creates the git object with the Owner name "maestrith"
 ;upload this script
 FileRead,text,%A_ScriptName%
-git.CreateRepo("AHK_Github")
-git.CreateFile("AHK_Github",A_ScriptName,text,"First Commit","Chad Wilson","maestrith@gmail.com")
-;git.update("Testing",A_ScriptName,text,"Working on the class")
+git.update("AHK_Github",A_ScriptName,text,"Working on the class")
+/*
+	;original creation of the repo
+	git.CreateRepo("AHK_Github")
+	git.CreateFile("AHK_Github",A_ScriptName,text,"First Commit","Chad Wilson","maestrith@gmail.com")
+*/
 ;/upload this script
 /*
 	git.CreateRepo("Testing") ;creates a new repo with the name "Testing". There are other options that can be set.
