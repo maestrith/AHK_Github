@@ -1,13 +1,13 @@
 git:=new github("maestrith") ;creates the git object with the Owner name "maestrith"
 ;update this script
 FileRead,text,%A_ScriptName%
-/*
-	git.update("AHK_Github",A_ScriptFullPath,text,"Working on the class")
-*/
+git.update("AHK_Github",A_ScriptFullPath,text,"Working on the class")
 ;/update this script
-;original creation of the repo
-;git.CreateRepo("AHK_Github")
-git.CreateFile("AHK_Github",A_ScriptFullPath,text,"First Commit","Chad Wilson","maestrith@gmail.com")
+/*
+	;original creation of the repo
+	git.CreateRepo("AHK_Github")
+	git.CreateFile("AHK_Github",A_ScriptFullPath,text,"First Commit","Chad Wilson","maestrith@gmail.com")
+*/
 /*
 	git.CreateRepo("Testing") ;creates a new repo with the name "Testing". There are other options that can be set.
 	git.List("Testing") ;gets a list of commits from the Testing repo and saves it to commits.txt mostly for debugging and will probably be removed
