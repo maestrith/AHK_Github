@@ -1,8 +1,8 @@
 git:=new github("maestrith") ;creates the git object with the Owner name "maestrith"
-;upload this script
+;update this script
 FileRead,text,%A_ScriptName%
 git.update("AHK_Github",A_ScriptName,text,"Working on the class")
-;/upload this script
+;/update this script
 /*
 	;original creation of the repo
 	git.CreateRepo("AHK_Github")
