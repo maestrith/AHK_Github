@@ -1,8 +1,12 @@
 git:=new github("maestrith") ;creates the git object with the Owner name "maestrith"
+/*
+*/
 ;update this script
 FileRead,text,%A_ScriptName%
 git.update("AHK_Github",A_ScriptFullPath,text,"Working on the class")
+;git.CreateRepo("Testing")
 ;/update this script
+git.limit()
 /*
 	;original creation of the repo
 	git.CreateRepo("AHK_Github")
@@ -38,6 +42,12 @@ class github{
 		this.token:="?access_token=" token
 		this.owner:=owner
 		return this
+	}
+	Limit(){
+		url:=this.url "/rate_limit" this.token
+		this.http.Open("GET",url)
+		this.http.Send()
+		m(this.http.ResponseText)
 	}
 	CreateRepo(name,description="Created with AHK Studio",homepage="",private="false",issues="false",wiki="true",downloads="true"){
 		url:=this.url "/user/repos" this.token
