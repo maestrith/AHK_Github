@@ -15,7 +15,11 @@ Gui,Add,Text,xm,Repo To Update
 IniRead,repo,Settings.ini,GitHub,repo,0
 repo:=repo?repo:""
 Gui,Add,Edit,x+5 w250 vrepo gupdate,%repo%
+Gui,Add,Button,xm ggettoken,Get A Token
 Gui,Show,,Github Information
+return
+gettoken:
+Run,https://github.com/settings/applications
 return
 update:
 Gui,Submit,Nohide
