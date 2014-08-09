@@ -1,6 +1,7 @@
 #SingleInstance,force
 git:=new github("maestrith") ;creates the git object with the Owner name "maestrith"
 controls:={owner:"Owner (GitHub Username)",email:"Email",name:"Your Full Name"}
+Gui,Add,Text,,Usage: Fill out the required information`nand then drag files (text files only) into the window.`n
 for a,b in ["owner","email","name"]{
 	IniRead,value,Settings.ini,GitHub,%b%,0
 	value:=value?value:""
