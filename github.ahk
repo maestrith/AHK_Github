@@ -26,15 +26,14 @@ GuiEscape:
 GuiClose:
 ExitApp
 return
-repo:="Test"
-real_name:="Someone"
-email:="someone@gmail.com"
 GuiDropFiles:
 Gui,Submit,Nohide
+InputBox,commitmsg,New Commit Message,Please enter a commit message for this commit
 current_commit:=git.getref(repo)
 if !(current_commit){
 	git.CreateRepo(repo)
 	git.CreateFile(repo,"README.md",";Readme.md","First Commit",name,email)
+	Sleep,500
 	current_commit:=git.getref(repo)
 }
 files:=[]
@@ -47,7 +46,7 @@ for a,b in StrSplit(A_GuiEvent,"`n"){
 	files[filename]:=blob
 }
 tree:=git.Tree(repo,current_commit,files)
-commit:=git.commit(repo,tree,current_commit)
+commit:=git.commit(repo,tree,current_commit,commitmsg)
 git.ref(repo,commit) ;new commit value
 return
 class github{
@@ -90,11 +89,11 @@ class github{
 		json:=Trim(json,",") "]}"
 		return this.sha(this.Send("POST",url,json))
 	}
-	commit(repo,tree,parent){
+	commit(repo,tree,parent,message="Updated the file"){
 		url:=this.url "/repos/" this.owner "/" repo "/git/commits" this.token
 		json=
 		(
-		{"message":"Updated the file","author":{"name": "Chad Wilson","email": "maestrith@gmail.com"},"parents":["%parent%"],"tree":"%tree%"}
+		{"message":"%message%","author":{"name": "Chad Wilson","email": "maestrith@gmail.com"},"parents":["%parent%"],"tree":"%tree%"}
 		)
 		return this.sha(this.Send("POST",url,json))
 	}
