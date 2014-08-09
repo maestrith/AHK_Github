@@ -145,16 +145,6 @@ class github{
 		if sha
 			IniWrite,%sha%,files.ini,%filefullpath%,sha
 	}
-	List(repo,sha=""){
-		url:=this.url "/repos/" this.owner "/" repo "/commits"
-		add:=sha?"/" sha this.token:this.token
-		url.=add
-		this.http.Open("GET",url)
-		this.http.Send()
-		FileDelete,commits.txt
-		FileAppend,% this.http.ResponseText,commits.txt
-		Run,commits.txt
-	}
 }
 m(x*){
 	for a,b in x
@@ -166,9 +156,4 @@ utf8(info){
 	for a,b in {"`n":"\n","`t":"\t","`r":""}
 		StringReplace,info,info,%a%,%b%,All
 	return info
-}
-t(x*){
-	for a,b in x
-		list.=b "`n"
-	ToolTip,%list%
 }
