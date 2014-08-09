@@ -145,35 +145,6 @@ class github{
 		if sha
 			IniWrite,%sha%,files.ini,%filefullpath%,sha
 	}
-	Update(repo,filefullpath,text,commit="Updated",branch="master"){
-		SplitPath,filefullpath,filename
-		IniRead,sha,files.ini,%filefullpath%,sha,0
-		if !sha
-			return m("File does not exist.  Please create the file first")
-		url:=this.url "/repos/" this.owner "/" repo "/contents/" filename this.token
-		text:=this.encode(text)
-		json=
-		(
-		{"message":"%commit%","content":"%text%","sha":"%sha%","branch":"%branch%"}
-		)
-		this.http.Open("PUT",url)
-		this.http.Send(json)
-		RegExMatch(this.http.ResponseText,"U)"Chr(34) "sha" Chr(34) ":(.*),",found)
-		if sha:=Trim(found1,Chr(34))
-			IniWrite,%sha%,files.ini,%filefullpath%,sha
-		Else
-			m("an error occured")
-	}
-	Encode(text){ ;original http://www.autohotkey.com/forum/viewtopic.php?p=238120#238120
-		if text=""
-			return
-		cp:=0
-		VarSetCapacity(rawdata,StrPut(text,"utf-8")),sz:=StrPut(text,&rawdata,"utf-8")-1
-		DllCall("Crypt32.dll\CryptBinaryToString","ptr",&rawdata,"uint",sz,"uint",0x40000001,"ptr",0,"uint*",cp)
-		VarSetCapacity(str,cp*(A_IsUnicode?2:1))
-		DllCall("Crypt32.dll\CryptBinaryToString","ptr",&rawdata,"uint",sz,"uint",0x40000001,"str",str,"uint*",cp)
-		return str
-	}
 	List(repo,sha=""){
 		url:=this.url "/repos/" this.owner "/" repo "/commits"
 		add:=sha?"/" sha this.token:this.token
