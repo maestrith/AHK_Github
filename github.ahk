@@ -1,5 +1,4 @@
 #SingleInstance,force
-git:=new github("maestrith") ;creates the git object with the Owner name "maestrith"
 controls:={owner:"Owner (GitHub Username)",email:"Email",name:"Your Full Name"}
 Gui,Add,Text,,Usage: Fill out the required information`nand then drag files (text files only) into the window.`n
 for a,b in ["owner","email","name"]{
@@ -29,6 +28,7 @@ ExitApp
 return
 GuiDropFiles:
 Gui,Submit,Nohide
+git:=new github(owner,token)
 InputBox,commitmsg,New Commit Message,Please enter a commit message for this commit
 current_commit:=git.getref(repo)
 if !(current_commit){
@@ -52,6 +52,12 @@ git.ref(repo,commit) ;new commit value
 return
 class github{
 	static url:="https://api.github.com",http:=[]
+	__New(owner,token){
+		this.http:=ComObjCreate("WinHttp.WinHttpRequest.5.1")
+		this.token:="?access_token=" token
+		this.owner:=owner
+		return this
+	}
 	sha(text){
 		RegExMatch(this.http.ResponseText,"U)"Chr(34) "sha" Chr(34) ":(.*),",found)
 		return Trim(found1,Chr(34))
@@ -107,17 +113,6 @@ class github{
 		)
 		this.http.send(json)
 		m("New Commit Created",this.http.ResponseText)
-	}
-	__New(owner){
-		FileRead,token,token.txt
-		if !(token){
-			m("A token is required.","Create a file called token.txt and place your token in it.")
-			ExitApp
-		}
-		this.http:=ComObjCreate("WinHttp.WinHttpRequest.5.1")
-		this.token:="?access_token=" token
-		this.owner:=owner
-		return this
 	}
 	Limit(){
 		url:=this.url "/rate_limit" this.token
